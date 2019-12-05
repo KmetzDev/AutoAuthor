@@ -1,5 +1,6 @@
 import random
 import string
+import re
 
 class PredictionEngine:
     """
@@ -27,6 +28,13 @@ class TextReader:
     def setup(self):
         print('Reading File:', self.file_name)
 
-    def read_and_convert_file(self):
+    def read_and_format_text(self):
+        """
+        Reads text from file and removes anything other than a<->z A<->Z
+        Creates an array of each character to easily iterate over
+        """
+        self.fmt_text = []
         raw_text = open(self.file_name, 'r')
         for line in raw_text:
+            for char in line:
+                self.fmt_text.append(re.sub(r'[^a-zA-Z ]','',str(char)).split())
