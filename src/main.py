@@ -8,7 +8,11 @@ def main():
 
     t = TextReader('lotr')
     t.setup()
-    t.read_and_convert_file()
+    t.read_and_format_text()
+
+    e = PredictionEngine()
+    e.init_dict()
+    print(e.char_set)
 
 
 
