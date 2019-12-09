@@ -10,9 +10,11 @@ def main():
     t.setup()
     t.read_and_format_text()
 
+
     e = PredictionEngine()
     e.init_dict()
-    print(e.char_set)
+    e.populate_char_set(t.fmt_text)
+    e.show_predictions()
 
 
 

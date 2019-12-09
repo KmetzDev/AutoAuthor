@@ -8,6 +8,7 @@ class PredictionEngine:
     Creates a history and prediction of next character based upon
     characters seen previously
     """
+    char_set = {}
 
     def __init__(self):
         self.predicted_char = random.choice(string.ascii_lowercase)
@@ -23,7 +24,6 @@ class PredictionEngine:
         and a count of each occurence of the following letter.
         char_set{k: current letter, v: dict{k_2: following letters, v_2: count}}
         """
-        self.char_set = {}
         alpha = 'abcdefghijklmnopqrstuvwxyz'
 
         for letter in alpha:
@@ -31,7 +31,7 @@ class PredictionEngine:
 
         for key in self.char_set:
           for letter in alpha:
-            self.char_set[key][letter] = 0
+              self.char_set[key][letter] = 0
 
     def get_max_key(self, target):
         """
@@ -40,9 +40,31 @@ class PredictionEngine:
         occurances of next characters
         """
         target_dict = self.char_set[target]
-        print(target_dict)
-        max_key = max(target_dict, key=lambda k: target_dict[k])
-        print(max_key)
+        return max(target_dict, key=lambda k: target_dict[k])
+
+    def populate_char_set(self, text):
+        """
+        Iterate over all chars in the prediction text, add the char following
+        the current char to the correct position in the char_set
+        """
+        for idx, char in enumerate(text):
+            if idx < len(text) - 1:
+                next_char = text[idx + 1]
+
+            if char.isspace() or next_char.isspace() or char == '' or next_char == '':
+                pass
+            else:
+                self.char_set[char][next_char] = self.char_set[char][next_char] + 1
+
+    def show_predictions(self):
+        alpha = 'abcdefghijklmnopqrstuvwxyz'
+
+        for key in self.char_set:
+          for letter in alpha:
+              m = self.get_max_key(letter)
+              print(''+ letter + ': ' + m)
+
+
 
 class TextReader:
     """
@@ -59,10 +81,10 @@ class TextReader:
     def read_and_format_text(self):
         """
         Reads text from file and removes anything other than a<->z A<->Z
-        Creates an array of each character to easily iterate over
+        Creates an array of each character in the text file
         """
         self.fmt_text = []
         raw_text = open(self.file_name, 'r')
         for line in raw_text:
-            for char in line:
-                self.fmt_text.append(re.sub(r'[^a-zA-Z ]','',str(char)).split())
+            for char in line.lower():
+                self.fmt_text.append(re.sub(r'[^a-zA-Z ]','',str(char)))
