@@ -9,10 +9,11 @@ class PredictionEngine:
     characters seen previously
     """
     char_set = {}
+    init_char = ''
 
     def __init__(self):
-        self.predicted_char = random.choice(string.ascii_lowercase)
-        print('Base Prediction:', self.predicted_char)
+        self.init_char = random.choice(string.ascii_lowercase)
+        print('Base Prediction:', self.init_char)
 
     def print_prediction(self):
         print(self.predicted_char)
@@ -60,10 +61,18 @@ class PredictionEngine:
         alpha = 'abcdefghijklmnopqrstuvwxyz'
 
         for key in self.char_set:
-          for letter in alpha:
-              m = self.get_max_key(letter)
-              print(''+ letter + ': ' + m)
+            m = self.get_max_key(key)
+            print(''+ key + ': ' + m)
 
+    def write_prediction(self, start_char, text):
+        """
+        Use the prediction dictionary to write the most likely next letters
+        """
+        for idx, char in enumerate(text):
+            if char.isspace() or char == '':
+                print('  |  ')
+            elif idx < len(text) - 1:
+                print('' + char + ' | ' + self.get_max_key(char))
 
 
 class TextReader:
